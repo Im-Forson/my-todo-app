@@ -300,7 +300,14 @@ inputValue.addEventListener("keypress", function(event) {
                 li.append(checkContainer);
                 li.append(paragraph);
                 li.append(crossContainer);
+
+                if (!isAll) {
+                    li.classList.add("no-display")
+                    
+                }
+
                 document.querySelector(".sortable-list").appendChild(li);
+                
             }
 
             else if (!isLight) {
@@ -324,7 +331,15 @@ inputValue.addEventListener("keypress", function(event) {
                 li.append(checkContainer);
                 li.append(paragraph);
                 li.append(crossContainer);
+                
+                
+                if (!isAll) {
+                    li.classList.add("no-display")
+                    
+                }
                 document.querySelector(".sortable-list").appendChild(li);
+
+                
             }
 
             inputValue.value = "";
@@ -334,7 +349,7 @@ inputValue.addEventListener("keypress", function(event) {
             
         }
         localStorage.setItem("todoList", JSON.stringify(textArray));
-        location.reload();
+        
     }
     
 });
@@ -357,6 +372,7 @@ inputCheck.addEventListener("click", function() {
         textArray.push([inputText, 'uncheck']);
 
         if (isLight) {
+            
             li.classList.add("item");
             li.classList.add("item-light");
             li.classList.add("uncheck");
@@ -380,10 +396,17 @@ inputCheck.addEventListener("click", function() {
             li.append(checkContainer);
             li.append(paragraph);
             li.append(crossContainer);
+            
+            if (!isAll) {
+                li.classList.add("no-display")
+            }
+            
             document.querySelector(".sortable-list").appendChild(li);
+            
         }
 
         else if (!isLight) {
+            
             li.classList.add("item");
             li.classList.add("item-dark");
 
@@ -404,7 +427,13 @@ inputCheck.addEventListener("click", function() {
             li.append(checkContainer);
             li.append(paragraph);
             li.append(crossContainer);
+            
+            if (!isAll) {
+                li.classList.add("no-display")
+            }
+
             document.querySelector(".sortable-list").appendChild(li);
+            
         }
 
         inputValue.value = "";
@@ -414,7 +443,6 @@ inputCheck.addEventListener("click", function() {
         
     }
     localStorage.setItem("todoList", JSON.stringify(textArray));
-    location.reload();
 
 });
 
@@ -590,6 +618,7 @@ list.addEventListener("click", function(ev) {
 // Display all todos on desktop
 displayAll.addEventListener("click", function() {
 
+    isAll = true;
     displayAll.classList.add("active-tab");
     displayActive.classList.remove("active-tab");
     displayCompleted.classList.remove("active-tab");
@@ -601,6 +630,8 @@ displayAll.addEventListener("click", function() {
 
 // Display active todos only on desktop
 displayActive.addEventListener("click", function() {
+
+    isAll = true;
 
     if (totalChecked == items.length) {
         alert("No active todo");
@@ -625,6 +656,8 @@ displayActive.addEventListener("click", function() {
 
 // Display Completed todos only on desktop
 displayCompleted.addEventListener("click", function() {
+
+    isAll = false;
 
     if (totalChecked < 1) {
         alert("None has been completed");
@@ -653,6 +686,7 @@ displayCompleted.addEventListener("click", function() {
 // Display all todos on mobile
 mobileAll.addEventListener("click", function() {
 
+    isAll = true;
     mobileAll.classList.add("active-tab");
     mobileActive.classList.remove("active-tab");
     mobileCompleted.classList.remove("active-tab");
@@ -665,6 +699,7 @@ mobileAll.addEventListener("click", function() {
 // Display active todos only on mobile
 mobileActive.addEventListener("click", function() {
 
+    isAll = true;
     if (totalChecked == items.length) {
         alert("No active todo");
     }
@@ -689,6 +724,7 @@ mobileActive.addEventListener("click", function() {
 // Display Completed todos only on mobile
 mobileCompleted.addEventListener("click", function() {
 
+    isAll = false;
     if (totalChecked < 1) {
         alert("None has been completed");
     }
