@@ -24,8 +24,9 @@ const tabs = document.querySelectorAll(".tab");
 const mobileTabs = document.querySelectorAll(".mobile-tab");
 const storedItems = JSON.parse(localStorage.getItem("todoList")); 
 const storedMode = JSON.parse(localStorage.getItem("displayMode"));
+const scrollStyle = document.querySelector(".sortable-list");
 
-
+var isAll = true;
 var totalList = 0;
 var totalChecked = 0;
 var totalLeft = 0;
@@ -118,6 +119,8 @@ function initialize() {
             const crossContainerChild = document.createElement("div");
             li.classList.add("item");
             li.classList.add("item-dark");
+            li.classList.add(textArray[i][1]);
+            li.draggable = "true";
 
             checkContainer.classList.add("check-con");
             checkContainer.classList.add("check-con-bg");
@@ -128,10 +131,10 @@ function initialize() {
             paragraph.classList.add("todo-text");
 
             crossContainer.classList.add("icon-cross-con");
-                crossContainerChild.classList.add("icon-cross");
+            crossContainerChild.classList.add("icon-cross");
 
             checkContainer.append(checkContainerChild);
-            paragraph.append(textArray[i]);
+            paragraph.append(textArray[i][0]);
             crossContainer.append(crossContainerChild);
             li.append(checkContainer);
             li.append(paragraph);
@@ -198,6 +201,8 @@ function themeFunction() {
         dragDropTxt.classList.remove("drag-drop-light");
         dragDropTxt.classList.add("drag-drop-dark");
         attribution.classList.add("att-dark");
+        scrollStyle.classList.remove("light-scroll");
+        scrollStyle.classList.add("dark-scroll");
         
     }
 
@@ -245,10 +250,12 @@ function themeFunction() {
         dragDropTxt.classList.remove("drag-drop-dark");
         dragDropTxt.classList.add("drag-drop-light");
         attribution.classList.remove("att-dark");
+        scrollStyle.classList.remove("dark-scroll");
+        scrollStyle.classList.add("light-scroll");
     }
 }
 
-/* Adding new todo to the list */
+/* Adding new todo to the list by enter key */
 const inputValue = document.getElementById("input-value");
 var inputText;
 
@@ -327,8 +334,88 @@ inputValue.addEventListener("keypress", function(event) {
             
         }
         localStorage.setItem("todoList", JSON.stringify(textArray));
+        location.reload();
     }
     
+});
+
+// Adding new todo by clicking the add button
+inputCheck.addEventListener("click", function() {
+    if (inputValue.value === "") {
+        alert("The input field cannot be empty");
+    }
+
+    else {
+        // Creating elements
+        const li = document.createElement("li");
+        const checkContainer = document.createElement("div");
+        const checkContainerChild = document.createElement("div");
+        const paragraph = document.createElement("p");
+        const crossContainer = document.createElement("div");
+        const crossContainerChild = document.createElement("div");
+        inputText = inputValue.value;
+        textArray.push([inputText, 'uncheck']);
+
+        if (isLight) {
+            li.classList.add("item");
+            li.classList.add("item-light");
+            li.classList.add("uncheck");
+            li.draggable = "true";
+
+            checkContainer.classList.add("check-con");
+            checkContainer.classList.add("check-con-bg");
+            checkContainer.classList.add("check-light");
+            checkContainerChild.classList.add("check-icon-con");
+            checkContainerChild.classList.add("check-icon");
+
+            paragraph.classList.add("todo-text");
+
+            crossContainer.classList.add("icon-cross-con");
+            crossContainerChild.classList.add("icon-cross");
+
+
+            checkContainer.append(checkContainerChild);
+            paragraph.append(inputValue.value);
+            crossContainer.append(crossContainerChild);
+            li.append(checkContainer);
+            li.append(paragraph);
+            li.append(crossContainer);
+            document.querySelector(".sortable-list").appendChild(li);
+        }
+
+        else if (!isLight) {
+            li.classList.add("item");
+            li.classList.add("item-dark");
+
+            checkContainer.classList.add("check-con");
+            checkContainer.classList.add("check-con-bg");
+            checkContainer.classList.add("check-dark");
+            checkContainerChild.classList.add("check-icon-con");
+            checkContainerChild.classList.add("check-icon");
+
+            paragraph.classList.add("todo-text");
+
+            crossContainer.classList.add("icon-cross-con");
+            crossContainerChild.classList.add("icon-cross");
+
+            checkContainer.append(checkContainerChild);
+            paragraph.append(inputValue.value);
+            crossContainer.append(crossContainerChild);
+            li.append(checkContainer);
+            li.append(paragraph);
+            li.append(crossContainer);
+            document.querySelector(".sortable-list").appendChild(li);
+        }
+
+        inputValue.value = "";
+        totalList += 1;
+        totalLeft += 1;
+        todoLeft.innerHTML = totalLeft;
+        
+    }
+    localStorage.setItem("todoList", JSON.stringify(textArray));
+    location.reload();
+
 });
 
 
@@ -545,8 +632,8 @@ displayCompleted.addEventListener("click", function() {
 
     else {
         displayAll.classList.remove("active-tab");
-        displayActive.classList.remove("active-tab");
-        displayCompleted.classList.add("active-tab");
+    displayActive.classList.remove("active-tab");
+    displayCompleted.classList.add("active-tab");
 
         for (let i = 0; i < items.length; i++) {
             items[i].style.display = "flex";
@@ -656,7 +743,7 @@ clearCompleted.addEventListener("click", function() {
             
         }
         localStorage.setItem("todoList", JSON.stringify(textArray));
-    
+        location.reload();
     }
     
 });
